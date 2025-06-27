@@ -3,6 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioModule } from './usuario/usuario.module';
 import { ContaModule } from './conta/conta.module';
+import { CategoriaModule } from './categoria/categoria.module';
+import { FormaModule } from './forma-pagamento/forma-pagamento.module';
+import { TransacaoModule } from './transacao/transacao.module';
 
 @Module({
   imports: [
@@ -35,6 +38,9 @@ import { ContaModule } from './conta/conta.module';
     }),
     UsuarioModule,
     ContaModule,
+    CategoriaModule,
+    FormaModule,
+    TransacaoModule,
   ],
   controllers: [],
   providers: [],
