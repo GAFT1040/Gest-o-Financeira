@@ -1,6 +1,8 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsuarioModule } from './usuario/usuario.module';
+import { ContaModule } from './conta/conta.module';
 
 @Module({
   imports: [
@@ -27,9 +29,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           password: password,
           database: 'finance',
           autoLoadEntities: true,
+          synchronize: true,
         };
       },
     }),
+    UsuarioModule,
+    ContaModule,
   ],
   controllers: [],
   providers: [],
