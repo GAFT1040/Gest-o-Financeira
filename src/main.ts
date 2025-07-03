@@ -12,7 +12,7 @@ async function bootstrap() {
     .setTitle(pkg.name)
     .setDescription(pkg.description)
     .setVersion(pkg.version)
-    .addTag('cats')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

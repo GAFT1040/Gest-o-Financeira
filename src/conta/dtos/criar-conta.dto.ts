@@ -1,13 +1,20 @@
 import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsNumber, IsString, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 import { EtipoConta } from 'src/types/index.enum';
 
 export class CriarContaDTO {
   @IsEnum(EtipoConta, {
     message: 'O tipo de conta deve ser um valor válido de ETipoConta.',
   })
-  @ApiProperty({ description: 'Tipo da Conta' })
+  @ApiProperty({ description: 'Tipo da Conta', enum: EtipoConta })
   tipo: EtipoConta | null;
 
   @IsString({ message: 'O título deve ser uma string.' })
@@ -17,7 +24,7 @@ export class CriarContaDTO {
   @ApiProperty({ description: 'Titulo da Conta' })
   titulo: string;
 
-  @Optional()
+  @IsOptional()
   @IsBoolean({
     message: 'O campo is_carteira deve ser verdadeiro ou falso (boolean).',
   })

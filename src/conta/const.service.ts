@@ -3,6 +3,8 @@ import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { Conta } from './conta.entity';
 import { CriarContaDTO } from './dtos/criar-conta.dto';
 import { Usuario } from 'src/usuario/usuario.entity';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { AtualziarContaDTO } from './dtos/atualizar-conta.dto';
 
 export class ContaService {
   constructor(
@@ -38,6 +40,51 @@ export class ContaService {
       if (!queryRunner) qrunner.rollbackTransaction();
     } finally {
       if (!queryRunner) await qrunner.release();
+    }
+  }
+
+  async buscarTodos(auth: Partial<Usuario>) {
+    const conta = await this.repository.find({
+      where: { usuario: { id: auth.id } },
+    });
+
+    if (conta.length === 0)
+      throw new NotFoundException('Nenhuma contra encontrada!');
+
+    return conta;
+  }
+
+  async buscarUm(id: string, auth: Partial<Usuario>) {
+    const conta = await this.repository.findOne({
+      where: { usuario: { id: auth.id } },
+    });
+
+    if (!conta) throw new NotFoundException('Conta não encontrada!');
+
+    return conta;
+  }
+
+  async atualizar(id: string, data: AtualziarContaDTO, auth: Partial<Usuario>) {
+    const conta = await this.buscarUm(id, auth);
+
+    await this.repository.update(conta.id, {
+      ...data,
+    });
+  }
+
+  async deletar(id: string, auth: Partial<Usuario>) {
+    try {
+      const conta = await this.buscarUm(id, auth);
+
+      if (conta.is_carteira) throw new ForbiddenException(' ');
+
+      await this.repository.delete(conta.id);
+
+      return conta.titulo;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
     }
   }
 }
